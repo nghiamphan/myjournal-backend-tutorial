@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/journalEntries
+Content-Type: application/json
+
+{
+	"content": "test 2",
+	"importatnt": true
+}
