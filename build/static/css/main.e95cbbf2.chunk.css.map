@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,GACE,WAAY,CACZ,iBACF,CAEA,cACE,UAAW,CACX,eAAgB,CAChB,cACF","file":"main.e95cbbf2.chunk.css","sourcesContent":["h1 {\n  color: green;\n  font-style: italic;\n}\n\n.journalEntry {\n  color: grey;\n  padding-top: 5px;\n  font-size: 15px;\n}"]}
