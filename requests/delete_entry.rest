@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/journalEntries/5e801f0f47881d43300814b3
+DELETE http://localhost:3001/api/journalEntries/5e80a6bffb8ea44f18ed3f3a
