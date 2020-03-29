@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/journalEntries/5e801e4bb1c71516400d6ee5
+Content-Type: application/json
+
+{
+	"content": "updated content",
+	"importatnt": false
+}

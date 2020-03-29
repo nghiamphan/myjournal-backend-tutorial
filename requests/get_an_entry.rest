@@ -1,0 +1,1 @@
+GET http://localhost:3001/api/journalEntries/5e801e9ac89ea6266c6e4ad0
