@@ -69,7 +69,7 @@ app.put('/api/journalEntries/:id', (request, response, next) => {
 
 	const journalEntry = {
 		content: body.content,
-    important: body.important,
+		important: body.important,
 	}
 
 	JournalEntry.findByIdAndUpdate(request.params.id, journalEntry, { new: true })
@@ -79,8 +79,9 @@ app.put('/api/journalEntries/:id', (request, response, next) => {
 		.catch(error => next(error))
 })
 
-app.delete('/api/journalEntries/:id', (request, response) => {
+app.delete('/api/journalEntries/:id', (request, response, next) => {
 	JournalEntry.findByIdAndRemove(request.params.id)
+		// eslint-disable-next-line no-unused-vars
 		.then(result => {
 			response.status(204).end()
 		})
@@ -99,8 +100,8 @@ const errorHandler = (error, request, response, next) => {
 	if (error.name === 'CastError' && error.kind === 'ObjectId') {
 		return response.status(400).send({ error: 'malformatted id' })
 	} else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
-  }
+		return response.status(400).json({ error: error.message })
+	}
 
 	next(error)
 }
