@@ -1,25 +1,21 @@
 const journalEntriesRouter = require('express').Router()
 const JournalEntry = require('../models/journalEntry')
 
-journalEntriesRouter.get('/', (request, response) => {
-	JournalEntry.find({}).then(entries => {
-		response.json(entries.map(entry => entry.toJSON()))
-	})
+journalEntriesRouter.get('/', async (request, response) => {
+	const entries = await JournalEntry.find({})
+	response.json(entries.map(entry => entry.toJSON()))
 })
 
-journalEntriesRouter.get('/:id', (request, response, next) => {
-	JournalEntry.findById(request.params.id)
-		.then(entry => {
-			if (entry) {
-				response.json(entry.toJSON())
-			} else {
-				response.status(404).end()
-			}
-		})
-		.catch(error => next(error))
+journalEntriesRouter.get('/:id', async (request, response) => {
+	const entry = await JournalEntry.findById(request.params.id)
+	if (entry) {
+		response.json(entry.toJSON())
+	} else {
+		response.status(404).end()
+	}
 })
 
-journalEntriesRouter.post('/', (request, response, next) => {
+journalEntriesRouter.post('/', async (request, response) => {
 	const body = request.body
 
 	const journalEntry = new JournalEntry({
@@ -28,22 +24,16 @@ journalEntriesRouter.post('/', (request, response, next) => {
 		date: new Date()
 	})
 
-	journalEntry.save()
-		.then(savedEntry => {
-			response.json(savedEntry.toJSON())
-		})
-		.catch(error => next(error))
+	const savedEntry = await journalEntry.save()
+	response.json(savedEntry.toJSON())
 })
 
-journalEntriesRouter.delete('/:id', (request, response, next) => {
-	JournalEntry.findByIdAndRemove(request.params.id)
-		.then(() => {
-			response.status(204).end()
-		})
-		.catch(error => next(error))
+journalEntriesRouter.delete('/:id', async (request, response) => {
+	await JournalEntry.findByIdAndRemove(request.params.id)
+	response.status(204).end()
 })
 
-journalEntriesRouter.put('/:id', (request, response, next) => {
+journalEntriesRouter.put('/:id', async (request, response) => {
 	const body = request.body
 
 	const journalEntry = {
@@ -51,11 +41,8 @@ journalEntriesRouter.put('/:id', (request, response, next) => {
 		important: body.important,
 	}
 
-	JournalEntry.findByIdAndUpdate(request.params.id, journalEntry, { new: true })
-		.then(updatedEntry => {
-			response.json(updatedEntry.toJSON())
-		})
-		.catch(error => next(error))
+	const updatedEntry = await JournalEntry.findByIdAndUpdate(request.params.id, journalEntry, { new: true })
+	response.json(updatedEntry.toJSON())
 })
 
 module.exports = journalEntriesRouter
