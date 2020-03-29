@@ -57,8 +57,9 @@ app.post('/api/journalEntries', (request, response, next) => {
 	})
 
 	journalEntry.save()
-		.then(savedEntry => {
-			response.json(savedEntry.toJSON())
+		.then(savedEntry => savedEntry.toJSON())
+		.then(savedAndFormattedEntry => {
+			response.json(savedAndFormattedEntry)
 		})
 		.catch(error => next(error))
 })
