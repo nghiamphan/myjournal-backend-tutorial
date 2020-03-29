@@ -21,10 +21,12 @@ app.get('/', (req, res) => {
 	res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/api/journalEntries', (request, response) => {
-	JournalEntry.find({}).then(journalEntries => {
-		response.json(journalEntries.map(entry => entry.toJSON()))
-	})
+app.get('/api/journalEntries', (request, response, next) => {
+	JournalEntry.find({})
+		.then(journalEntries => {
+			response.json(journalEntries.map(entry => entry.toJSON()))
+		})
+		.catch(error => next(error))
 })
 
 app.get('/api/journalEntries/:id', (request, response, next) => {
@@ -39,7 +41,7 @@ app.get('/api/journalEntries/:id', (request, response, next) => {
 		.catch(error => next(error))
 })
 
-app.post('/api/journalEntries', (request, response) => {
+app.post('/api/journalEntries', (request, response, next) => {
 	const body = request.body
 
 	if (!body.content) {
@@ -54,9 +56,11 @@ app.post('/api/journalEntries', (request, response) => {
 		date: new Date(),
 	})
 
-	journalEntry.save().then(savedEntry => {
-		response.json(savedEntry.toJSON())
-	})
+	journalEntry.save()
+		.then(savedEntry => {
+			response.json(savedEntry.toJSON())
+		})
+		.catch(error => next(error))
 })
 
 app.put('/api/journalEntries/:id', (request, response, next) => {
@@ -93,7 +97,9 @@ const errorHandler = (error, request, response, next) => {
 
 	if (error.name === 'CastError' && error.kind === 'ObjectId') {
 		return response.status(400).send({ error: 'malformatted id' })
-	}
+	} else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
+  }
 
 	next(error)
 }
