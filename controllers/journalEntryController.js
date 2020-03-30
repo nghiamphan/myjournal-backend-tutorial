@@ -1,8 +1,10 @@
 const journalEntriesRouter = require('express').Router()
 const JournalEntry = require('../models/journalEntry')
+const User = require('../models/user')
 
 journalEntriesRouter.get('/', async (request, response) => {
 	const entries = await JournalEntry.find({})
+		.populate('user', { username: 1, name: 1 })
 	response.json(entries.map(entry => entry.toJSON()))
 })
 
@@ -18,13 +20,19 @@ journalEntriesRouter.get('/:id', async (request, response) => {
 journalEntriesRouter.post('/', async (request, response) => {
 	const body = request.body
 
+	const user = await User.findById(body.userId)
+
 	const journalEntry = new JournalEntry({
 		content: body.content,
 		important: body.important || false,
-		date: new Date()
+		date: new Date(),
+		user: user._id
 	})
 
 	const savedEntry = await journalEntry.save()
+	user.entries = user.entries.concat(savedEntry._id)
+	await user.save()
+
 	response.json(savedEntry.toJSON())
 })
 

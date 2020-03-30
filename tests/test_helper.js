@@ -1,4 +1,5 @@
 const JournalEntry = require('../models/journalEntry')
+const User = require('../models/user')
 
 const initialEntries = [
 	{
@@ -24,6 +25,11 @@ const entriesInDb = async () => {
 	return entries.map(entry => entry.toJSON())
 }
 
+const usersInDb = async () => {
+	const users = await User.find({})
+	return users.map(user => user.toJSON())
+}
+
 module.exports = {
-	initialEntries, nonExistingId, entriesInDb
+	initialEntries, nonExistingId, entriesInDb, usersInDb
 }

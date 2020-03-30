@@ -2,6 +2,7 @@ POST http://localhost:3001/api/journalEntries
 Content-Type: application/json
 
 {
-	"content": "test 2",
-	"importatnt": true
+	"content": "test 4",
+	"importatnt": true,
+	"userId": "5e8205e26aa7fc4a14d1e7bd"
 }
