@@ -1,6 +1,15 @@
+const jwt = require('jsonwebtoken')
 const journalEntriesRouter = require('express').Router()
 const JournalEntry = require('../models/journalEntry')
 const User = require('../models/user')
+
+const getTokenFrom = request => {
+	const authorization = request.get('authorization')
+	if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+		return authorization.substring(7)
+	}
+	return null
+}
 
 journalEntriesRouter.get('/', async (request, response) => {
 	const entries = await JournalEntry.find({})
@@ -19,8 +28,14 @@ journalEntriesRouter.get('/:id', async (request, response) => {
 
 journalEntriesRouter.post('/', async (request, response) => {
 	const body = request.body
+	const token = getTokenFrom(request)
 
-	const user = await User.findById(body.userId)
+	// Note: if token = null, an JsonWebTokenError will be thrown. We already handle it in our errorHandler middleware, so that's good.
+	const decodedToken = jwt.verify(token, process.env.SECRET)
+	if (!token || !decodedToken.id) {
+		return response.status(401).json({ error: 'token missing or invalid' })
+	}
+	const user = await User.findById(decodedToken.id)
 
 	const journalEntry = new JournalEntry({
 		content: body.content,

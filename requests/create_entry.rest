@@ -1,5 +1,6 @@
 POST http://localhost:3001/api/journalEntries
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5waGFuIiwiaWQiOiI1ZTgyMDVlMjZhYTdmYzRhMTRkMWU3YmQiLCJpYXQiOjE1ODU2MTUxNzB9.vuOD2XXLI5TKVVoKpiTnwEzCcR_2NOchYL6jkBFiGMg
 
 {
 	"content": "test 4",
